@@ -47,61 +47,57 @@ namespace WorldPopulation
             int counter = 0;
             try
             {
-                using (StreamReader reader = new StreamReader(path))
+                string[] lines = File.ReadAllLines(path);
+
+                List<CountryPopulation> country = new List<CountryPopulation>();
+                lines
+                    .Select((line, index) => new { line, index })
+                    .ToList()
+                    .ForEach(l =>
                 {
-                    List<CountryPopulation> country = new List<CountryPopulation>();
-                    
-                    // Reading the csv file
-                    while (!reader.EndOfStream)
+                    string[] values = l.line.Split(',');
+
+                    if (l.index == 0)
                     {
-                        string line = reader.ReadLine();
-                        string[] values = line.Split(',');
-
-                        if(counter == 0)
+                        foreach (string value in values)
                         {
-                            foreach(string value in values)
-                            {
-                                listOfYears.Add(Int32.Parse(value));
-                            }
-                            counter++;
+                            listOfYears.Add(Int32.Parse(value));
                         }
-                        else
-                        {
-                            // Converting string to int, if not done can do types errors
-                            Int32.TryParse(values[0], out int rank);
-                            Int32.TryParse(values[5], out int p22);
-                            Int32.TryParse(values[6], out int p20);
-                            Int32.TryParse(values[7], out int p15);
-                            Int32.TryParse(values[8], out int p10);
-                            Int32.TryParse(values[9], out int p00);
-                            Int32.TryParse(values[10], out int p90);
-                            Int32.TryParse(values[11], out int p80);
-                            Int32.TryParse(values[12], out int p70);
-
-                            CountryPopulation c = new CountryPopulation
-                            {
-                                Rank = rank,
-                                CCA3 = values[1],
-                                Country = values[2],
-                                Capital = values[3],
-                                Continent = values[4],
-                                Population2022 = p22,
-                                Population2020 = p20,
-                                Population2015 = p15,
-                                Population2010 = p10,
-                                Population2000 = p00,
-                                Population1990 = p90,
-                                Population1980 = p80,
-                                Population1970 = p70,
-                            };
-                            country.Add(c);
-                        }
+                        counter++;
                     }
-                    
-                    Console.ReadLine();
+                    else
+                    {
+                        // Converting string to int, if not done can do types errors
+                        Int32.TryParse(values[0], out int rank);
+                        Int32.TryParse(values[5], out int p22);
+                        Int32.TryParse(values[6], out int p20);
+                        Int32.TryParse(values[7], out int p15);
+                        Int32.TryParse(values[8], out int p10);
+                        Int32.TryParse(values[9], out int p00);
+                        Int32.TryParse(values[10], out int p90);
+                        Int32.TryParse(values[11], out int p80);
+                        Int32.TryParse(values[12], out int p70);
 
-                    return country;
-                }
+                        CountryPopulation c = new CountryPopulation
+                        {
+                            Rank = rank,
+                            CCA3 = values[1],
+                            Country = values[2],
+                            Capital = values[3],
+                            Continent = values[4],
+                            Population2022 = p22,
+                            Population2020 = p20,
+                            Population2015 = p15,
+                            Population2010 = p10,
+                            Population2000 = p00,
+                            Population1990 = p90,
+                            Population1980 = p80,
+                            Population1970 = p70,
+                        };
+                        country.Add(c);
+                    }
+                });
+                return country;
             }
             catch
             {
