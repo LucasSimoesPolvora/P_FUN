@@ -28,11 +28,35 @@ namespace WorldPopulation
         {
             InitializeComponent();
 
-            List<CountryPopulation> countryPop = ReadCsvFile();
+            List<CountryPopulation> countryPop = ReadCsvFile();            
+
+            WpfPlot1.Refresh();
 
             if(countryPop != null)
-            {
-                ShowChart(countryPop);
+            {   
+                Loaded += (s, e) =>
+                {
+                    // Add labels in the graph
+                    WpfPlot1.Plot.XLabel("Year");
+                    WpfPlot1.Plot.YLabel("Population");
+
+                    foreach (CountryPopulation country in countryPop)
+                    {
+                        int index = 0;
+                        int[] dataX = new int[listOfYears.Count + 1];
+                        listOfYears.ForEach(year =>
+                        {
+                            dataX[index] = year;
+                            index++;
+                        });
+
+                        int[] dataY = new int[]{ country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
+
+                        WpfPlot1.Plot.Add.Scatter(dataX, dataY);
+                        WpfPlot1.Plot.Axes.AutoScale();
+                        WpfPlot1.Refresh();
+                    }
+                };
             }
         }
 
@@ -82,7 +106,7 @@ namespace WorldPopulation
                         {
                             Rank = rank,
                             CCA3 = values[1],
-                            Country = values[2],
+                            Name = values[2],
                             Capital = values[3],
                             Continent = values[4],
                             Population2022 = p22,
@@ -106,31 +130,12 @@ namespace WorldPopulation
             }
         }
 
-        public void ShowChart(List<CountryPopulation> countryPop)
-        {
-            Loaded += (s, e) =>
-            {
-                List<int> dataX = new List<int>();
-                List<int> dataY = new List<int>(); ;
-                foreach (CountryPopulation country in countryPop)
-                {
-                    dataX.Add(1);
-                    dataY.Add(1);
-                }
-                WpfPlot1.Plot.XLabel("Year");
-                WpfPlot1.Plot.YLabel("Population");
-                WpfPlot1.Plot.Add.Scatter(dataX, dataY);
-                WpfPlot1.Refresh();
-
-            };
-        }
-
         // Creating the class that will contain the csv
         public class CountryPopulation
         {
             public int Rank { get; set; }
             public string CCA3 { get; set; }
-            public string Country { get; set; }
+            public string Name { get; set; }
             public string Capital { get; set; }
             public string Continent { get; set; }
             public int Population2022 { get; set; }
