@@ -28,36 +28,42 @@ namespace WorldPopulation
         {
             InitializeComponent();
 
-            List<CountryPopulation> countryPop = ReadCsvFile();            
+            List<CountryPopulation> countryPop = ReadCsvFile();
+            
 
-            WpfPlot1.Refresh();
+            countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
 
             if(countryPop != null)
             {   
-                Loaded += (s, e) =>
-                {
-                    // Add labels in the graph
-                    WpfPlot1.Plot.XLabel("Year");
-                    WpfPlot1.Plot.YLabel("Population");
-
-                    foreach (CountryPopulation country in countryPop)
-                    {
-                        int index = 0;
-                        int[] dataX = new int[listOfYears.Count + 1];
-                        listOfYears.ForEach(year =>
-                        {
-                            dataX[index] = year;
-                            index++;
-                        });
-
-                        int[] dataY = new int[]{ country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
-
-                        WpfPlot1.Plot.Add.Scatter(dataX, dataY);
-                        WpfPlot1.Plot.Axes.AutoScale();
-                        WpfPlot1.Refresh();
-                    }
-                };
+                ShowChart(countryPop);
             }
+        }
+
+        public void ShowChart(List<CountryPopulation> countryPop)
+        {
+            Loaded += (s, e) =>
+            {
+                // Add labels in the graph
+                WpfPlot1.Plot.XLabel("Year");
+                WpfPlot1.Plot.YLabel("Population");
+
+                countryPop.ForEach(country =>
+                {
+                    int index = 0;
+                    int[] dataX = new int[listOfYears.Count + 1];
+                    listOfYears.ForEach(year =>
+                    {
+                        dataX[index] = year;
+                        index++;
+                    });
+
+                    int[] dataY = new int[] { country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
+
+                    WpfPlot1.Plot.Add.Scatter(dataX, dataY);
+                    WpfPlot1.Plot.Axes.AutoScale();
+                    WpfPlot1.Refresh();
+                });
+            };
         }
 
         /// <summary>
