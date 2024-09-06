@@ -14,28 +14,26 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Reflection;
+using ScottPlot;
 
 namespace WorldPopulation
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// logic interaction for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<int> listOfYears = new List<int>();
         public MainWindow()
         {
             InitializeComponent();
 
             List<CountryPopulation> countryPop = ReadCsvFile();
 
-            Loaded += (s, e) =>
+            if(countryPop != null)
             {
-                double[] dataX = { 1, 2, 3, 4, 5 };
-                double[] dataY = { 1, 4, 9, 16, 25 };
-                WpfPlot1.Plot.Add.Scatter(dataX, dataY);
-                WpfPlot1.Refresh();
-                
-            };
+                ShowChart(countryPop);
+            }
         }
 
         /// <summary>
@@ -43,58 +41,92 @@ namespace WorldPopulation
         /// </summary>
         public List<CountryPopulation> ReadCsvFile()
         {
-            // 
+            // Path where the scv file locates (Will be removed when the implementation of client put his own csv file will be done)
             string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\world_population.csv";
-            
-            using(StreamReader reader = new StreamReader(path))
+
+            int counter = 0;
+            try
             {
-                List<CountryPopulation> country = new List<CountryPopulation>();
-                try
+                using (StreamReader reader = new StreamReader(path))
                 {
+                    List<CountryPopulation> country = new List<CountryPopulation>();
+                    
                     // Reading the csv file
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();
                         string[] values = line.Split(',');
 
-                        // Converting string to int, if not done can do types errors
-                        Int32.TryParse(values[0], out int rank);
-                        Int32.TryParse(values[5], out int p22);
-                        Int32.TryParse(values[6], out int p20);
-                        Int32.TryParse(values[7], out int p15);
-                        Int32.TryParse(values[8], out int p10);
-                        Int32.TryParse(values[9], out int p00);
-                        Int32.TryParse(values[10], out int p90);
-                        Int32.TryParse(values[11], out int p80);
-                        Int32.TryParse(values[12], out int p70);
-
-                        CountryPopulation c = new CountryPopulation
+                        if(counter == 0)
                         {
-                            Rank = rank,
-                            CCA3 = values[1],
-                            Country = values[2],
-                            Capital = values[3],
-                            Continent = values[4],
-                            Population2022 = p22,
-                            Population2020 = p20,
-                            Population2015 = p15,
-                            Population2010 = p10,
-                            Population2000 = p00,
-                            Population1990 = p90,
-                            Population1980 = p80,
-                            Population1970 = p70,
-                        };
-                        country.Add(c);
-                    }
-                }
-                catch 
-                {
-                    MessageBox.Show("Unable to read file, check if there is an error in the file.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                Console.ReadLine();
+                            foreach(string value in values)
+                            {
+                                listOfYears.Add(Int32.Parse(value));
+                            }
+                            counter++;
+                        }
+                        else
+                        {
+                            // Converting string to int, if not done can do types errors
+                            Int32.TryParse(values[0], out int rank);
+                            Int32.TryParse(values[5], out int p22);
+                            Int32.TryParse(values[6], out int p20);
+                            Int32.TryParse(values[7], out int p15);
+                            Int32.TryParse(values[8], out int p10);
+                            Int32.TryParse(values[9], out int p00);
+                            Int32.TryParse(values[10], out int p90);
+                            Int32.TryParse(values[11], out int p80);
+                            Int32.TryParse(values[12], out int p70);
 
-                return country;
+                            CountryPopulation c = new CountryPopulation
+                            {
+                                Rank = rank,
+                                CCA3 = values[1],
+                                Country = values[2],
+                                Capital = values[3],
+                                Continent = values[4],
+                                Population2022 = p22,
+                                Population2020 = p20,
+                                Population2015 = p15,
+                                Population2010 = p10,
+                                Population2000 = p00,
+                                Population1990 = p90,
+                                Population1980 = p80,
+                                Population1970 = p70,
+                            };
+                            country.Add(c);
+                        }
+                    }
+                    
+                    Console.ReadLine();
+
+                    return country;
+                }
             }
+            catch
+            {
+                MessageBox.Show("Unable to read file, check if there is an error in the file.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
+        public void ShowChart(List<CountryPopulation> countryPop)
+        {
+            Loaded += (s, e) =>
+            {
+                List<int> dataX = new List<int>();
+                List<int> dataY = new List<int>(); ;
+                foreach (CountryPopulation country in countryPop)
+                {
+                    dataX.Add(1);
+                    dataY.Add(1);
+                }
+                WpfPlot1.Plot.XLabel("Year");
+                WpfPlot1.Plot.YLabel("Population");
+                WpfPlot1.Plot.Add.Scatter(dataX, dataY);
+                WpfPlot1.Refresh();
+
+            };
         }
 
         // Creating the class that will contain the csv
