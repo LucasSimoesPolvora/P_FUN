@@ -33,7 +33,9 @@ namespace WorldPopulation
 
             ResetList();
 
-            
+            WpfPlot1.Plot.ShowLegend(Edge.Bottom);
+
+
             /*countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
 
             if(countryPop != null)
@@ -50,7 +52,7 @@ namespace WorldPopulation
 
             WpfPlot1.Plot.Clear();
             
-                        WpfPlot1.Refresh();
+            WpfPlot1.Refresh();
         }
 
         public void ClearGraph(object sender, RoutedEventArgs e)
@@ -63,7 +65,8 @@ namespace WorldPopulation
         public void CreateGraph(object sender, RoutedEventArgs e)
         {
             List<CountryPopulation> countryPop = ReadCsvFile();
-            
+
+            WpfPlot1.Plot.Clear();
             // Add labels in the graph
             WpfPlot1.Plot.XLabel("Year");
             WpfPlot1.Plot.YLabel("Population");
@@ -82,11 +85,13 @@ namespace WorldPopulation
                         });
                         int[] dataY = new int[] { country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
                         WpfPlot1.Plot.Add.Scatter(dataX, dataY);
+                        WpfPlot1.Plot.Add.Scatter(dataX, dataY).LegendText = country.Name;
                         WpfPlot1.Plot.Axes.AutoScale();
-                        WpfPlot1.Refresh();
                     }
                 }
-            });        
+                
+            });
+            WpfPlot1.Refresh();
         }
 
         /// <summary>
