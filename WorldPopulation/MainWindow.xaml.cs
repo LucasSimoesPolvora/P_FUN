@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Reflection;
 using ScottPlot;
+using System.Diagnostics;
+using ScottPlot.Colormaps;
 
 namespace WorldPopulation
 {
@@ -115,7 +117,6 @@ namespace WorldPopulation
             // Path where the scv file locates (Will be removed when the implementation of client put his own csv file will be done)
             string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\world_population.csv";
 
-            int counter = 0;
             try
             {
                 string[] lines = File.ReadAllLines(path);
@@ -125,49 +126,16 @@ namespace WorldPopulation
                     .Select((line, index) => new { line, index })
                     .ToList()
                     .ForEach(l =>
-                {
+                    {
                     string[] values = l.line.Split(',');
 
-                    if (l.index == 0)
-                    {
-                        foreach (string value in values)
-                        {
-                            listOfYears.Add(Int32.Parse(value));
-                        }
-                        counter++;
-                    }
-                    else
-                    {
-                        // Converting string to int, if not done can do types errors
-                        Int32.TryParse(values[0], out int rank);
-                        Int32.TryParse(values[5], out int p22);
-                        Int32.TryParse(values[6], out int p20);
-                        Int32.TryParse(values[7], out int p15);
-                        Int32.TryParse(values[8], out int p10);
-                        Int32.TryParse(values[9], out int p00);
-                        Int32.TryParse(values[10], out int p90);
-                        Int32.TryParse(values[11], out int p80);
-                        Int32.TryParse(values[12], out int p70);
+                    CountryPopulation c = l.index == 0 ? AddYears(values) : CreateCountry(values);
 
-                        CountryPopulation c = new CountryPopulation
-                        {
-                            Rank = rank,
-                            CCA3 = values[1],
-                            Name = values[2],
-                            Capital = values[3],
-                            Continent = values[4],
-                            Population2022 = p22,
-                            Population2020 = p20,
-                            Population2015 = p15,
-                            Population2010 = p10,
-                            Population2000 = p00,
-                            Population1990 = p90,
-                            Population1980 = p80,
-                            Population1970 = p70,
-                        };
+                    if(c != null)
+                    {
                         country.Add(c);
                     }
-                });
+                    });
                 return country;
             }
             catch
@@ -176,6 +144,47 @@ namespace WorldPopulation
                 return null;
             }
         }
+
+        public CountryPopulation AddYears(string[] values)
+        {
+            foreach (string value in values)
+            {
+                listOfYears.Add(Int32.Parse(value));
+            }
+            return null;
+        }
+
+        public CountryPopulation CreateCountry(string[] values)
+        {
+            // Converting string to int, if not done can do types errors
+            Int32.TryParse(values[0], out int rank);
+            Int32.TryParse(values[5], out int p22);
+            Int32.TryParse(values[6], out int p20);
+            Int32.TryParse(values[7], out int p15);
+            Int32.TryParse(values[8], out int p10);
+            Int32.TryParse(values[9], out int p00);
+            Int32.TryParse(values[10], out int p90);
+            Int32.TryParse(values[11], out int p80);
+            Int32.TryParse(values[12], out int p70);
+
+            CountryPopulation c = new CountryPopulation
+            {
+                Rank = rank,
+                CCA3 = values[1],
+                Name = values[2],
+                Capital = values[3],
+                Continent = values[4],
+                Population2022 = p22,
+                Population2020 = p20,
+                Population2015 = p15,
+                Population2010 = p10,
+                Population2000 = p00,
+                Population1990 = p90,
+                Population1980 = p80,
+                Population1970 = p70,
+            };
+            return c;
+        } 
 
         // Creating the class that will contain the csv
         public class CountryPopulation
