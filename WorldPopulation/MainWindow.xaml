@@ -8,9 +8,12 @@
         mc:Ignorable="d"
         Title="Charts" Height="800" Width="1200">
     <Grid>
-        <ListBox x:Name="listboxNames" Height="235" Margin="25,25,940,520"></ListBox>
+        <Label FontSize="30" Margin="80, 0, 0, 0">Countries</Label>
+        <ListBox x:Name="listboxNames" Height="235" Margin="38,47,927,502" SelectionChanged="AddCountry"></ListBox>
+        <Label FontSize="30" Margin="295, 0, 0, 0">Chosen Countries</Label>
+        <ListBox x:Name="listboxNamesChosen" Height="235" Margin="305,47,660,502"></ListBox>
         <ScottPlot:WpfPlot x:Name="WpfPlot1" Margin="88,324,75,25" />
-        <Button Content="Reset" FontSize="20" HorizontalAlignment="Left" Margin="1025,27,0,0" VerticalAlignment="Top" Height="40" Width="100" Cursor="Hand"/>
+        <Button Content="Clear" FontSize="20" HorizontalAlignment="Left" Margin="1025,27,0,0" VerticalAlignment="Top" Height="40" Width="100" Cursor="Hand"/>
         <Button Content="Search" FontSize="20" HorizontalAlignment="Left" Margin="1025,80,0,0" VerticalAlignment="Top" Height="40" Width="100" Cursor="Hand"/>
     </Grid>
 </Window>

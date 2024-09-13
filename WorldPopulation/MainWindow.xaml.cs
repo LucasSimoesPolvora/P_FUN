@@ -66,6 +66,23 @@ namespace WorldPopulation
             };
         }
 
+        public void AddCountry(object sender, SelectionChangedEventArgs e)
+        {
+            if(listboxNames.SelectedItem != null)
+            {
+                listboxNamesChosen.Items.Add(listboxNames.SelectedItem.ToString());
+
+                int index = listboxNames.SelectedIndex;
+
+                if (listboxNames.SelectedIndex >= 0)
+                {
+                    listboxNames.Items.RemoveAt(index);
+                }
+            } 
+        }
+
+        
+
         /// <summary>
         /// This method will read the csv file and return a list of class with the results
         /// </summary>
