@@ -29,7 +29,7 @@ namespace WorldPopulation
         {
             InitializeComponent();
 
-            ResetGraph();
+            ResetList();
 
             
             /*countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
@@ -40,16 +40,27 @@ namespace WorldPopulation
             }*/
         }
 
-        public void ResetGraph()
+        public void ResetList()
         {
             List<CountryPopulation> countryPop = ReadCsvFile();
+            listboxNames.Items.Clear();
             countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
+
+            WpfPlot1.Plot.Clear();
+            
+                        WpfPlot1.Refresh();
         }
 
-        public void CreateGraph(object sender, RoutedEventArgs ed)
+        public void ClearGraph(object sender, RoutedEventArgs e)
+        {
+            listboxNamesChosen.Items.Clear();
+
+            ResetList();
+        }
+
+        public void CreateGraph(object sender, RoutedEventArgs e)
         {
             List<CountryPopulation> countryPop = ReadCsvFile();
-            
             
             // Add labels in the graph
             WpfPlot1.Plot.XLabel("Year");
