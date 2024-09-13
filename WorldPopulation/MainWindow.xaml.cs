@@ -24,48 +24,63 @@ namespace WorldPopulation
     public partial class MainWindow : Window
     {
         List<int> listOfYears = new List<int>();
+
         public MainWindow()
         {
             InitializeComponent();
 
-            List<CountryPopulation> countryPop = ReadCsvFile();
-            
+            ResetGraph();
 
-            countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
+            
+            /*countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
 
             if(countryPop != null)
             {   
                 ShowChart(countryPop);
-            }
+            }*/
         }
 
-        public void ShowChart(List<CountryPopulation> countryPop)
+        public void ResetGraph()
         {
-            Loaded += (s, e) =>
-            {
-                // Add labels in the graph
-                WpfPlot1.Plot.XLabel("Year");
-                WpfPlot1.Plot.YLabel("Population");
-
-                countryPop.ForEach(country =>
-                {
-                    int index = 0;
-                    int[] dataX = new int[listOfYears.Count + 1];
-                    listOfYears.ForEach(year =>
-                    {
-                        dataX[index] = year;
-                        index++;
-                    });
-
-                    int[] dataY = new int[] { country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
-
-                    WpfPlot1.Plot.Add.Scatter(dataX, dataY);
-                    WpfPlot1.Plot.Axes.AutoScale();
-                    WpfPlot1.Refresh();
-                });
-            };
+            List<CountryPopulation> countryPop = ReadCsvFile();
+            countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
         }
 
+        public void CreateGraph(object sender, RoutedEventArgs ed)
+        {
+            List<CountryPopulation> countryPop = ReadCsvFile();
+            
+            
+            // Add labels in the graph
+            WpfPlot1.Plot.XLabel("Year");
+            WpfPlot1.Plot.YLabel("Population");
+            countryPop.ForEach(country =>
+            {
+                foreach (string chosen in listboxNamesChosen.Items)
+                {
+                    if (chosen == country.Name)
+                    {
+                        int index = 0;
+                        int[] dataX = new int[listOfYears.Count + 1];
+                        listOfYears.ForEach(year =>
+                        {
+                            dataX[index] = year;
+                            index++;
+                        });
+                        int[] dataY = new int[] { country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
+                        WpfPlot1.Plot.Add.Scatter(dataX, dataY);
+                        WpfPlot1.Plot.Axes.AutoScale();
+                        WpfPlot1.Refresh();
+                    }
+                }
+            });        
+        }
+
+        /// <summary>
+        /// Add the country in another listbox that will be used to display the stats in the graph
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void AddCountry(object sender, SelectionChangedEventArgs e)
         {
             if(listboxNames.SelectedItem != null)
@@ -78,10 +93,8 @@ namespace WorldPopulation
                 {
                     listboxNames.Items.RemoveAt(index);
                 }
-            } 
+            }
         }
-
-        
 
         /// <summary>
         /// This method will read the csv file and return a list of class with the results
