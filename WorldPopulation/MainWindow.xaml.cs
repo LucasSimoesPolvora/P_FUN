@@ -154,6 +154,11 @@ namespace WorldPopulation
             return null;
         }
 
+        /// <summary>
+        /// Method that will create the countries data when the csv is already done
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public CountryPopulation CreateCountry(string[] values)
         {
             // Converting string to int, if not done can do types errors
@@ -186,7 +191,9 @@ namespace WorldPopulation
             return c;
         } 
 
-        // Creating the class that will contain the csv
+        /// <summary>
+        /// Creating the class that will contain the csv
+        /// </summary>
         public class CountryPopulation
         {
             public int Rank { get; set; }
