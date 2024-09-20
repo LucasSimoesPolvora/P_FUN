@@ -44,6 +44,9 @@ namespace WorldPopulation
             }*/
         }
 
+        /// <summary>
+        /// Resets the list of countries
+        /// </summary>
         public void ResetList()
         {
             List<CountryPopulation> countryPop = ReadCsvFile();
@@ -55,6 +58,11 @@ namespace WorldPopulation
             ScottGraph.Refresh();
         }
 
+        /// <summary>
+        /// Clears the search and the graph
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ClearGraph(object sender, RoutedEventArgs e)
         {
             listboxNamesChosen.Items.Clear();
@@ -62,6 +70,11 @@ namespace WorldPopulation
             ResetList();
         }
 
+        /// <summary>
+        /// Creates the graph with the choosen countries
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void CreateGraph(object sender, RoutedEventArgs e)
         {
             List<CountryPopulation> countryPop = ReadCsvFile();
@@ -132,14 +145,14 @@ namespace WorldPopulation
                     .ToList()
                     .ForEach(l =>
                     {
-                    string[] values = l.line.Split(',');
+                        string[] values = l.line.Split(',');
 
-                    CountryPopulation c = l.index == 0 ? AddYears(values) : CreateCountry(values);
+                        CountryPopulation c = l.index == 0 ? AddYears(values) : CreateCountry(values);
 
-                    if(c != null)
-                    {
-                        country.Add(c);
-                    }
+                        if(c != null)
+                        {
+                            country.Add(c);
+                        }
                     });
                 return country;
             }
@@ -150,6 +163,11 @@ namespace WorldPopulation
             }
         }
 
+        /// <summary>
+        /// Creates a list with all the years that are in the csv file 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public CountryPopulation AddYears(string[] values)
         {
             foreach (string value in values)
