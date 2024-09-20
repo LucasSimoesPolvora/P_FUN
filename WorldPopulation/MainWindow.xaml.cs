@@ -34,14 +34,6 @@ namespace WorldPopulation
             ResetList();
 
             ScottGraph.Plot.ShowLegend(Edge.Bottom);
-
-
-            /*countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
-
-            if(countryPop != null)
-            {   
-                ShowChart(countryPop);
-            }*/
         }
 
         /// <summary>
@@ -90,15 +82,15 @@ namespace WorldPopulation
             try
             {
                 StartYear = StartYearValue.Text != "" ? Int32.Parse(StartYearValue.Text): listOfYears.Min();
-
                 EndYear = EndYearValue.Text != "" ? Int32.Parse(EndYearValue.Text): listOfYears.Max();
 
+                if (StartYear >= EndYear) throw new Exception();
                 int gapYear = (int)Math.Ceiling((double)(EndYear - StartYear) / 20);
                 ScottGraph.Plot.Axes.SetLimits(StartYear - gapYear, EndYear + gapYear);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Your year values aren't a number", "years error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Your year values aren't a number or the end Year is smaller or equal than the start year", "years error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -131,8 +123,9 @@ namespace WorldPopulation
                             finalDataY[index] = dataY[i];
                             index++;
                         });
-                        ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY);
-                        ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY).LegendText = country.Name;
+                        //ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY);
+                        ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY)
+                                            .LegendText = country.Name;
                         //ScottGraph.Plot.Axes.AutoScale();
                         ScottGraph.Plot.Axes.AutoScaleY();
                     }
@@ -140,11 +133,6 @@ namespace WorldPopulation
                 
             });
             ScottGraph.Refresh();
-        }
-
-        public void ScatterInGraph()
-        {
-
         }
 
         /// <summary>
