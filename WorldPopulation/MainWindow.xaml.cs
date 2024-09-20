@@ -79,32 +79,72 @@ namespace WorldPopulation
         {
             List<CountryPopulation> countryPop = ReadCsvFile();
 
+            int StartYear;
+            int EndYear;
+
             ScottGraph.Plot.Clear();
             // Add labels in the graph
             ScottGraph.Plot.XLabel("Year");
             ScottGraph.Plot.YLabel("Population");
+
+            try
+            {
+                StartYear = StartYearValue.Text != "" ? Int32.Parse(StartYearValue.Text): listOfYears.Min();
+
+                EndYear = EndYearValue.Text != "" ? Int32.Parse(EndYearValue.Text): listOfYears.Max();
+
+                int gapYear = (int)Math.Ceiling((double)(EndYear - StartYear) / 20);
+                ScottGraph.Plot.Axes.SetLimits(StartYear - gapYear, EndYear + gapYear);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Your year values aren't a number", "years error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             countryPop.ForEach(country =>
             {
                 foreach (string chosen in listboxNamesChosen.Items)
                 {
                     if (chosen == country.Name)
                     {
+                        List<int> chosenIndex = new List<int>();
                         int index = 0;
                         int[] dataX = new int[listOfYears.Count + 1];
                         listOfYears.ForEach(year =>
                         {
+                            if(year <= EndYear && year >= StartYear)
+                            {
+                                chosenIndex.Add(index);
+                            }
                             dataX[index] = year;
                             index++;
                         });
                         int[] dataY = new int[] { country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
-                        ScottGraph.Plot.Add.Scatter(dataX, dataY);
-                        ScottGraph.Plot.Add.Scatter(dataX, dataY).LegendText = country.Name;
-                        ScottGraph.Plot.Axes.AutoScale();
+
+                        index = 0;
+                        int[] finalDataX = new int[chosenIndex.Count];
+                        int[] finalDataY = new int[chosenIndex.Count];
+                        chosenIndex.ForEach(i =>
+                        {
+                            finalDataX[index] = dataX[i];
+                            finalDataY[index] = dataY[i];
+                            index++;
+                        });
+                        ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY);
+                        ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY).LegendText = country.Name;
+                        //ScottGraph.Plot.Axes.AutoScale();
+                        ScottGraph.Plot.Axes.AutoScaleY();
                     }
                 }
                 
             });
             ScottGraph.Refresh();
+        }
+
+        public void ScatterInGraph()
+        {
+
         }
 
         /// <summary>
@@ -170,9 +210,12 @@ namespace WorldPopulation
         /// <returns></returns>
         public CountryPopulation AddYears(string[] values)
         {
-            foreach (string value in values)
+            if(listOfYears.Count == 0)
             {
-                listOfYears.Add(Int32.Parse(value));
+                values.ToList().ForEach((value) =>
+                {
+                    listOfYears.Add(Int32.Parse(value));
+                });
             }
             return null;
         }
