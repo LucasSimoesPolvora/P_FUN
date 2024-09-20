@@ -33,7 +33,7 @@ namespace WorldPopulation
 
             ResetList();
 
-            WpfPlot1.Plot.ShowLegend(Edge.Bottom);
+            ScottGraph.Plot.ShowLegend(Edge.Bottom);
 
 
             /*countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
@@ -50,9 +50,9 @@ namespace WorldPopulation
             listboxNames.Items.Clear();
             countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
 
-            WpfPlot1.Plot.Clear();
+            ScottGraph.Plot.Clear();
             
-            WpfPlot1.Refresh();
+            ScottGraph.Refresh();
         }
 
         public void ClearGraph(object sender, RoutedEventArgs e)
@@ -66,10 +66,10 @@ namespace WorldPopulation
         {
             List<CountryPopulation> countryPop = ReadCsvFile();
 
-            WpfPlot1.Plot.Clear();
+            ScottGraph.Plot.Clear();
             // Add labels in the graph
-            WpfPlot1.Plot.XLabel("Year");
-            WpfPlot1.Plot.YLabel("Population");
+            ScottGraph.Plot.XLabel("Year");
+            ScottGraph.Plot.YLabel("Population");
             countryPop.ForEach(country =>
             {
                 foreach (string chosen in listboxNamesChosen.Items)
@@ -84,14 +84,14 @@ namespace WorldPopulation
                             index++;
                         });
                         int[] dataY = new int[] { country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
-                        WpfPlot1.Plot.Add.Scatter(dataX, dataY);
-                        WpfPlot1.Plot.Add.Scatter(dataX, dataY).LegendText = country.Name;
-                        WpfPlot1.Plot.Axes.AutoScale();
+                        ScottGraph.Plot.Add.Scatter(dataX, dataY);
+                        ScottGraph.Plot.Add.Scatter(dataX, dataY).LegendText = country.Name;
+                        ScottGraph.Plot.Axes.AutoScale();
                     }
                 }
                 
             });
-            WpfPlot1.Refresh();
+            ScottGraph.Refresh();
         }
 
         /// <summary>

@@ -12,8 +12,8 @@
         <ListBox x:Name="listboxNames" Margin="38,47,927,530" SelectionChanged="AddCountry"/>
         <Label FontSize="30" Margin="295, 0, 0, 0">Chosen Countries</Label>
         <ListBox x:Name="listboxNamesChosen" Margin="305,47,660,530"/>
-        <ScottPlot:WpfPlot x:Name="WpfPlot1" Margin="88,324,75,25" />
         <Button Content="Clear" FontSize="20" HorizontalAlignment="Left" Margin="1025,27,0,0" VerticalAlignment="Top" Height="40" Width="100" Cursor="Hand" Click="ClearGraph"/>
         <Button Content="Search" FontSize="20" HorizontalAlignment="Left" Margin="1025,80,0,0" VerticalAlignment="Top" Height="40" Width="100" Cursor="Hand" Click="CreateGraph"/>
+        <ScottPlot:WpfPlot x:Name="ScottGraph" Margin="75,324,75,25" />
     </Grid>
 </Window>
