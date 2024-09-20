@@ -25,6 +25,7 @@ namespace WorldPopulation
     /// </summary>
     public partial class MainWindow : Window
     {
+        // List that will contain all the years in the csv
         List<int> listOfYears = new List<int>();
 
         public MainWindow()
@@ -41,12 +42,13 @@ namespace WorldPopulation
         /// </summary>
         public void ResetList()
         {
+            // Refilling the list box with country's names
             List<CountryPopulation> countryPop = ReadCsvFile();
             listboxNames.Items.Clear();
             countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
 
+            // Clear and refreshing the graph
             ScottGraph.Plot.Clear();
-            
             ScottGraph.Refresh();
         }
 
@@ -58,7 +60,6 @@ namespace WorldPopulation
         public void ClearGraph(object sender, RoutedEventArgs e)
         {
             listboxNamesChosen.Items.Clear();
-
             ResetList();
         }
 
@@ -79,12 +80,16 @@ namespace WorldPopulation
             ScottGraph.Plot.XLabel("Year");
             ScottGraph.Plot.YLabel("Population");
 
+            // Try catch to get the values of the start and end year
             try
             {
                 StartYear = StartYearValue.Text != "" ? Int32.Parse(StartYearValue.Text): listOfYears.Min();
                 EndYear = EndYearValue.Text != "" ? Int32.Parse(EndYearValue.Text): listOfYears.Max();
 
+                // If the end year is smaller or equal than the start year
                 if (StartYear >= EndYear) throw new Exception();
+
+                // This variable allows to get a little gap between the first point and the edge of the graph
                 int gapYear = (int)Math.Ceiling((double)(EndYear - StartYear) / 20);
                 ScottGraph.Plot.Axes.SetLimits(StartYear - gapYear, EndYear + gapYear);
             }
@@ -100,6 +105,7 @@ namespace WorldPopulation
                 {
                     if (chosen == country.Name)
                     {
+                        // This list allows to know which dates to filter
                         List<int> chosenIndex = new List<int>();
                         int index = 0;
                         int[] dataX = new int[listOfYears.Count + 1];
@@ -115,6 +121,7 @@ namespace WorldPopulation
                         int[] dataY = new int[] { country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
 
                         index = 0;
+                        // Getting the final datas after filtering
                         int[] finalDataX = new int[chosenIndex.Count];
                         int[] finalDataY = new int[chosenIndex.Count];
                         chosenIndex.ForEach(i =>
@@ -123,10 +130,12 @@ namespace WorldPopulation
                             finalDataY[index] = dataY[i];
                             index++;
                         });
-                        //ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY);
                         ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY)
                                             .LegendText = country.Name;
+                        // Scalles both axes
                         //ScottGraph.Plot.Axes.AutoScale();
+
+                        // Scalles only the Y axe
                         ScottGraph.Plot.Axes.AutoScaleY();
                     }
                 }
@@ -148,6 +157,7 @@ namespace WorldPopulation
 
                 int index = listboxNames.SelectedIndex;
 
+                // Removing in the original listBox
                 if (listboxNames.SelectedIndex >= 0)
                 {
                     listboxNames.Items.RemoveAt(index);
@@ -175,6 +185,7 @@ namespace WorldPopulation
                     {
                         string[] values = l.line.Split(',');
 
+                        // If it's the first line of the csv, it should contain only the years and then the countries data
                         CountryPopulation c = l.index == 0 ? AddYears(values) : CreateCountry(values);
 
                         if(c != null)
@@ -194,10 +205,11 @@ namespace WorldPopulation
         /// <summary>
         /// Creates a list with all the years that are in the csv file 
         /// </summary>
-        /// <param name="values"></param>
+        /// <param name="values">Array that will contain the years</param>
         /// <returns></returns>
         public CountryPopulation AddYears(string[] values)
         {
+            // This condition fixes an issue where the years started to add in each other
             if(listOfYears.Count == 0)
             {
                 values.ToList().ForEach((value) =>
@@ -211,11 +223,11 @@ namespace WorldPopulation
         /// <summary>
         /// Method that will create the countries data when the csv is already done
         /// </summary>
-        /// <param name="values"></param>
+        /// <param name="values">Array that will contain the data from the country</param>
         /// <returns></returns>
         public CountryPopulation CreateCountry(string[] values)
         {
-            // Converting string to int, if not done can do types errors
+            // Converting string to int, if not done can do typing errors
             Int32.TryParse(values[0], out int rank);
             Int32.TryParse(values[5], out int p22);
             Int32.TryParse(values[6], out int p20);
