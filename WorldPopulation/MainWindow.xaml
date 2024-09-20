@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WorldPopulation"
         xmlns:ScottPlot="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
         mc:Ignorable="d"
-        Title="Charts" Height="800" Width="1200">
+        Title="Charts" Height="820" Width="1230">
     <Grid>
         <Label FontSize="30" Margin="80, 0, 0, 0">Countries</Label>
         <ListBox x:Name="listboxNames" Margin="38,47,927,530" SelectionChanged="AddCountry"/>
