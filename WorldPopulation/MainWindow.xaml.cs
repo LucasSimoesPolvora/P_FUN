@@ -118,7 +118,6 @@ namespace WorldPopulation
                             dataX[index] = year;
                             index++;
                         });
-                        int[] dataY = new int[] { country.Population2022, country.Population2020, country.Population2015, country.Population2010, country.Population2000, country.Population1990, country.Population1980, country.Population1970 };
 
                         index = 0;
                         // Getting the final datas after filtering
@@ -127,7 +126,7 @@ namespace WorldPopulation
                         chosenIndex.ForEach(i =>
                         {
                             finalDataX[index] = dataX[i];
-                            finalDataY[index] = dataY[i];
+                            finalDataY[index] = country.PopulationData[i];
                             index++;
                         });
                         ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY)
@@ -227,16 +226,18 @@ namespace WorldPopulation
         /// <returns></returns>
         public CountryPopulation CreateCountry(string[] values)
         {
+            List<int> popValues = new List<int>();
+
             // Converting string to int, if not done can do typing errors
             Int32.TryParse(values[0], out int rank);
-            Int32.TryParse(values[5], out int p22);
-            Int32.TryParse(values[6], out int p20);
-            Int32.TryParse(values[7], out int p15);
-            Int32.TryParse(values[8], out int p10);
-            Int32.TryParse(values[9], out int p00);
-            Int32.TryParse(values[10], out int p90);
-            Int32.TryParse(values[11], out int p80);
-            Int32.TryParse(values[12], out int p70);
+            Int32.TryParse(values[5], out int p1);
+            Int32.TryParse(values[6], out int p2);
+            Int32.TryParse(values[7], out int p3);
+            Int32.TryParse(values[8], out int p4);
+            Int32.TryParse(values[9], out int p5);
+            Int32.TryParse(values[10], out int p6);
+            Int32.TryParse(values[11], out int p7);
+            Int32.TryParse(values[12], out int p8);
 
             CountryPopulation c = new CountryPopulation
             {
@@ -245,14 +246,7 @@ namespace WorldPopulation
                 Name = values[2],
                 Capital = values[3],
                 Continent = values[4],
-                Population2022 = p22,
-                Population2020 = p20,
-                Population2015 = p15,
-                Population2010 = p10,
-                Population2000 = p00,
-                Population1990 = p90,
-                Population1980 = p80,
-                Population1970 = p70,
+                PopulationData = new List<int> { p1, p2, p3, p4, p5, p6, p7, p8}
             };
             return c;
         } 
@@ -267,14 +261,7 @@ namespace WorldPopulation
             public string Name { get; set; }
             public string Capital { get; set; }
             public string Continent { get; set; }
-            public int Population2022 { get; set; }
-            public int Population2020 { get; set; }
-            public int Population2015 { get; set; }
-            public int Population2010 { get; set; }
-            public int Population2000 { get; set; }
-            public int Population1990 { get; set; }
-            public int Population1980 { get; set; }
-            public int Population1970 { get; set; }
+            public List<int> PopulationData { get; set; }
         }
     }
 }
