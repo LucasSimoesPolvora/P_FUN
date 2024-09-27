@@ -108,7 +108,7 @@ namespace WorldPopulation
                         // This list allows to know which dates to filter
                         List<int> chosenIndex = new List<int>();
                         int index = 0;
-                        int[] dataX = new int[listOfYears.Count + 1];
+                        int[] dataX = new int[listOfYears.Count];
                         listOfYears.ForEach(year =>
                         {
                             if(year <= EndYear && year >= StartYear)
@@ -119,14 +119,70 @@ namespace WorldPopulation
                             index++;
                         });
 
-                        index = 0;
+                        
                         // Getting the final datas after filtering
-                        int[] finalDataX = new int[chosenIndex.Count];
-                        int[] finalDataY = new int[chosenIndex.Count];
+                        int[] finalDataX = new int[chosenIndex.Count + 2];
+                        int[] finalDataY = new int[chosenIndex.Count + 2];
+
+                        finalDataX[0] = StartYear;
+
+                        void CalculatePopulation(int year, bool isItTheStartYear)
+                        {
+                            int dataIndex = isItTheStartYear ? 0 : finalDataX.Count() - 1;
+
+                            finalDataX[dataIndex] = year;
+
+                            int[] closest = new int[2] { listOfYears.Contains(year) ? year : listOfYears.Aggregate((x, y) => Math.Abs(x - year) < Math.Abs(y - year) ? x : y), 0 };
+                            closest[1] = listOfYears.FindIndex(x => x == closest[0]);
+                            int[] secondClosest = new int[2] { closest[0] < year ? listOfYears[closest[1] - 1] : listOfYears[closest[1] + 1], 0 };
+                            secondClosest[1] = listOfYears.FindIndex(x => x == secondClosest[0]);
+
+                            int ClosestyearDistance = secondClosest[0] < closest[0] ? closest[0] - secondClosest[0] : secondClosest[0] - closest[0];
+
+                            // gets the values of the smaller and bigger year
+                            int[] smaller = new int[2] { secondClosest[0] < closest[0] ? secondClosest[0] : closest[0], secondClosest[0] < closest[0] ? secondClosest[1] : closest[1] };
+                            int[] bigger = new int[2] { secondClosest[0] < closest[0] ? closest[0] : secondClosest[0], secondClosest[0] < closest[0] ? closest[1] : secondClosest[1] };
+
+                            int gap = year - smaller[0];
+                            double multiplicator = (ClosestyearDistance * gap) / 100.0;
+
+                            int biggestYearPopulation = country.PopulationData[smaller[1]] < country.PopulationData[bigger[1]] ? country.PopulationData[bigger[1]] : country.PopulationData[smaller[1]];
+                            int smallestYearPopulation = country.PopulationData[smaller[1]] < country.PopulationData[bigger[1]] ? country.PopulationData[smaller[1]] : country.PopulationData[bigger[1]];
+                            int differencePopulation = biggestYearPopulation - smallestYearPopulation;
+                            
+                            finalDataY[dataIndex] = (int)Math.Floor(country.PopulationData[smaller[1]] + differencePopulation * (multiplicator + 1));
+                        };
+                        
+                        if(StartYearValue.Text != "")
+                        {
+                            CalculatePopulation(StartYear, true);
+                        }
+
+                        if (EndYearValue.Text != "")
+                        {
+                            CalculatePopulation(EndYear, false);
+                        }
+
+                        index = 1;
+                        bool shouldBreak = false;
                         chosenIndex.ForEach(i =>
                         {
-                            finalDataX[index] = dataX[i];
-                            finalDataY[index] = country.PopulationData[i];
+                            if (shouldBreak)
+                                return;
+
+                            void setNormalValues()
+                            {
+                                if(dataX[i] != 0 && country.PopulationData[i] != 0)
+                                {
+                                    finalDataX[index] = dataX[i];
+                                    finalDataY[index] = country.PopulationData[i];
+                                }
+                            };
+
+                            if (index != chosenIndex.Count+ 1)
+                                setNormalValues();
+                            else
+                                shouldBreak = true;
                             index++;
                         });
                         ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY)
