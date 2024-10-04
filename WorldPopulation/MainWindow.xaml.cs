@@ -121,14 +121,13 @@ namespace WorldPopulation
 
                         
                         // Getting the final datas after filtering
-                        int[] finalDataX = new int[chosenIndex.Count + 2];
-                        int[] finalDataY = new int[chosenIndex.Count + 2];
+                        int[] finalDataX = new int[chosenIndex.Count+1];
+                        int[] finalDataY = new int[chosenIndex.Count + 1];
 
-                        finalDataX[0] = StartYear;
 
                         void CalculatePopulation(int year, bool isItTheStartYear)
                         {
-                            int dataIndex = isItTheStartYear ? 0 : finalDataX.Count() - 1;
+                            int dataIndex = isItTheStartYear ? 0 : chosenIndex.Count + 1;
 
                             finalDataX[dataIndex] = year;
 
@@ -163,7 +162,7 @@ namespace WorldPopulation
                             CalculatePopulation(EndYear, false);
                         }
 
-                        index = 1;
+                        index = 0;
                         bool shouldBreak = false;
                         chosenIndex.ForEach(i =>
                         {
@@ -176,16 +175,20 @@ namespace WorldPopulation
                                 {
                                     finalDataX[index] = dataX[i];
                                     finalDataY[index] = country.PopulationData[i];
+                                    index++;
                                 }
                             };
 
-                            if (index != chosenIndex.Count+ 1)
+                            if (index != chosenIndex.Count + 1 || index == 0)
                                 setNormalValues();
                             else
                                 shouldBreak = true;
-                            index++;
                         });
-                        ScottGraph.Plot.Add.Scatter(finalDataX, finalDataY)
+
+                        List<int> graphDataX = finalDataX.Where(data => data != 0).ToList();
+                        List<int> graphDataY = finalDataY.Where(data => data != 0).ToList();
+                        
+                        ScottGraph.Plot.Add.Scatter(graphDataX.ToArray(), graphDataY.ToArray())
                                             .LegendText = country.Name;
                         // Scalles both axes
                         //ScottGraph.Plot.Axes.AutoScale();
