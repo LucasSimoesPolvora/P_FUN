@@ -17,6 +17,8 @@ using System.Reflection;
 using ScottPlot;
 using System.Diagnostics;
 using ScottPlot.Colormaps;
+using System.Windows.Markup;
+using ScottPlot.TickGenerators.TimeUnits;
 
 namespace WorldPopulation
 {
@@ -119,10 +121,10 @@ namespace WorldPopulation
                             index++;
                         });
 
-                        
                         // Getting the final datas after filtering
-                        int[] finalDataX = new int[chosenIndex.Count+1];
-                        int[] finalDataY = new int[chosenIndex.Count + 1];
+
+                        List<int> finalDataX = new List<int>() { 0,0,0,0,0,0,0,0,0,0,0 };
+                        List<int> finalDataY = new List<int>() { 0,0,0,0,0,0,0,0,0,0,0 };
 
 
                         void CalculatePopulation(int year, bool isItTheStartYear)
@@ -131,8 +133,14 @@ namespace WorldPopulation
 
                             finalDataX[dataIndex] = year;
 
+                            // Getting the closest year to the chosen year
                             int[] closest = new int[2] { listOfYears.Contains(year) ? year : listOfYears.Aggregate((x, y) => Math.Abs(x - year) < Math.Abs(y - year) ? x : y), 0 };
                             closest[1] = listOfYears.FindIndex(x => x == closest[0]);
+
+                            if (closest[0] == year)
+                                return;
+
+                            // Getting the closest on the opposite of the chosen year
                             int[] secondClosest = new int[2] { closest[0] < year ? listOfYears[closest[1] - 1] : listOfYears[closest[1] + 1], 0 };
                             secondClosest[1] = listOfYears.FindIndex(x => x == secondClosest[0]);
 
@@ -142,6 +150,7 @@ namespace WorldPopulation
                             int[] smaller = new int[2] { secondClosest[0] < closest[0] ? secondClosest[0] : closest[0], secondClosest[0] < closest[0] ? secondClosest[1] : closest[1] };
                             int[] bigger = new int[2] { secondClosest[0] < closest[0] ? closest[0] : secondClosest[0], secondClosest[0] < closest[0] ? closest[1] : secondClosest[1] };
 
+                            // Calculates the gap between the years
                             int gap = year - smaller[0];
                             double multiplicator = (ClosestyearDistance * gap) / 100.0;
 
@@ -171,30 +180,52 @@ namespace WorldPopulation
 
                             void setNormalValues()
                             {
-                                if(dataX[i] != 0 && country.PopulationData[i] != 0)
+                                if(country.PopulationData[i] != 0)
                                 {
-                                    finalDataX[index] = dataX[i];
-                                    finalDataY[index] = country.PopulationData[i];
+                                    finalDataX.Add(dataX[i]);
+                                    finalDataY.Add(country.PopulationData[i]);
                                     index++;
                                 }
                             };
 
-                            if (index != chosenIndex.Count + 1 || index == 0)
+                            if (index != chosenIndex.Count + 1)
                                 setNormalValues();
                             else
                                 shouldBreak = true;
                         });
 
-                        List<int> graphDataX = finalDataX.Where(data => data != 0).ToList();
-                        List<int> graphDataY = finalDataY.Where(data => data != 0).ToList();
+                        List<int> graphDataX = new List<int>();
+                        List<int> graphDataY = new List<int>();
+
+                        // Delete useless data taht could bug the chart
+                        finalDataX.Where(data => data != 0).ToList().ForEach(data =>
+                        {
+                            if (!graphDataX.Contains(data))
+                            {
+                                graphDataX.Add(data);
+                            }
+                        });
+
+                        // Delete useless data that could bug the chart
+                        finalDataY.Where(dataY => dataY != 0).ToList().ForEach(dataY =>
+                        {
+                            if (!graphDataY.Contains(dataY))
+                            {
+                                graphDataY.Add(dataY);
+                            }
+                        });
                         
+                        // Sorting the data from smallest to biggest
+                        graphDataX.Sort();
+                        graphDataY.Sort();
+
                         ScottGraph.Plot.Add.Scatter(graphDataX.ToArray(), graphDataY.ToArray())
                                             .LegendText = country.Name;
                         // Scalles both axes
-                        //ScottGraph.Plot.Axes.AutoScale();
+                        ScottGraph.Plot.Axes.AutoScale();
 
                         // Scalles only the Y axe
-                        ScottGraph.Plot.Axes.AutoScaleY();
+                        //ScottGraph.Plot.Axes.AutoScaleY();
                     }
                 }
                 
