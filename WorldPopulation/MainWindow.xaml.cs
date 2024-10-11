@@ -275,12 +275,9 @@ namespace WorldPopulation
         /// </summary>
         public List<CountryPopulation> GiveValues(string filepath)
         {
-            // Path where the scv file locates (Will be removed when the implementation of client put his own csv file will be done)
-            string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\world_population.csv";
-
             try
             {
-                string[] lines = File.ReadAllLines(path);
+                string[] lines = File.ReadAllLines(filePath);
 
                 List<CountryPopulation> country = new List<CountryPopulation>();
                 lines
