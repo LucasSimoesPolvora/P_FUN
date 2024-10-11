@@ -91,11 +91,21 @@ namespace WorldPopulation
                 // If the end year is smaller or equal than the start year
                 if (StartYear >= EndYear) throw new Exception();
 
+                try
+                {
+                    if (StartYear < listOfYears.Min() || EndYear > listOfYears.Max() || StartYear > listOfYears.Max() || EndYear < listOfYears.Min()) throw new Exception();
+                }
+                catch
+                {
+                    MessageBox.Show($"Your years are too big or too small for the data, it should be between {listOfYears.Min()} and {listOfYears.Max()}", "years error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 // This variable allows to get a little gap between the first point and the edge of the graph
                 int gapYear = (int)Math.Ceiling((double)(EndYear - StartYear) / 20);
                 ScottGraph.Plot.Axes.SetLimits(StartYear - gapYear, EndYear + gapYear);
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("Your year values aren't a number or the end Year is smaller or equal than the start year", "years error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
