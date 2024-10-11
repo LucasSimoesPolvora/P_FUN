@@ -30,11 +30,11 @@ namespace WorldPopulation
         // List that will contain all the years in the csv
         List<int> listOfYears = new List<int>();
 
+        string filePath = "";
+
         public MainWindow()
         {
             InitializeComponent();
-
-            ResetList();
 
             ScottGraph.Plot.ShowLegend(Edge.Bottom);
         }
@@ -45,7 +45,7 @@ namespace WorldPopulation
         public void ResetList()
         {
             // Refilling the list box with country's names
-            List<CountryPopulation> countryPop = ReadCsvFile();
+            List<CountryPopulation> countryPop = GiveValues(filePath);
             listboxNames.Items.Clear();
             countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
 
@@ -72,7 +72,7 @@ namespace WorldPopulation
         /// <param name="e"></param>
         public void CreateGraph(object sender, RoutedEventArgs e)
         {
-            List<CountryPopulation> countryPop = ReadCsvFile();
+            List<CountryPopulation> countryPop = GiveValues(filePath);
 
             int StartYear;
             int EndYear;
@@ -233,6 +233,22 @@ namespace WorldPopulation
             ScottGraph.Refresh();
         }
 
+        public void ReadImportPath(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+
+            bool? response = openFileDialog.ShowDialog();
+
+            if (response == true)
+            {
+                filePath = openFileDialog.FileName;
+
+                GiveValues(filePath);
+                ResetList();
+                return;
+            }
+        }
+
         /// <summary>
         /// Add the country in another listbox that will be used to display the stats in the graph
         /// </summary>
@@ -257,7 +273,7 @@ namespace WorldPopulation
         /// <summary>
         /// This method will read the csv file and return a list of class with the results
         /// </summary>
-        public List<CountryPopulation> ReadCsvFile()
+        public List<CountryPopulation> GiveValues(string filepath)
         {
             // Path where the scv file locates (Will be removed when the implementation of client put his own csv file will be done)
             string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\world_population.csv";
@@ -339,7 +355,7 @@ namespace WorldPopulation
                 PopulationData = new List<int> { p1, p2, p3, p4, p5, p6, p7, p8}
             };
             return c;
-        } 
+        }
 
         /// <summary>
         /// Creating the class that will contain the csv
