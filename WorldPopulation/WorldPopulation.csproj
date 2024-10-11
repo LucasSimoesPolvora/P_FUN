@@ -43,11 +43,11 @@
     <Reference Include="OpenTK, Version=3.3.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>packages\OpenTK.3.3.1\lib\net20\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="ScottPlot, Version=5.0.37.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
-      <HintPath>packages\ScottPlot.5.0.37\lib\net462\ScottPlot.dll</HintPath>
+    <Reference Include="ScottPlot, Version=5.0.39.0, Culture=neutral, PublicKeyToken=86698dc10387c39e, processorArchitecture=MSIL">
+      <HintPath>packages\ScottPlot.5.0.39\lib\net462\ScottPlot.dll</HintPath>
     </Reference>
-    <Reference Include="ScottPlot.WPF, Version=5.0.37.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ScottPlot.WPF.5.0.37\lib\net462\ScottPlot.WPF.dll</HintPath>
+    <Reference Include="ScottPlot.WPF, Version=5.0.39.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ScottPlot.WPF.5.0.39\lib\net462\ScottPlot.WPF.dll</HintPath>
     </Reference>
     <Reference Include="SkiaSharp, Version=2.88.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>packages\SkiaSharp.2.88.8\lib\net462\SkiaSharp.dll</HintPath>
