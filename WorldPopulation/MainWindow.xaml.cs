@@ -279,7 +279,11 @@ namespace WorldPopulation
                 }
             }
         }
-
+        /// <summary>
+        /// Removes the country of the listbox that will display the stats in the graph
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void DeleteCountry(object sender, SelectionChangedEventArgs e)
         {
             if (listboxNamesChosen.SelectedItem != null)
