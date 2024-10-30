@@ -266,7 +266,7 @@ namespace WorldPopulation
         /// <param name="e"></param>
         public void AddCountry(object sender, SelectionChangedEventArgs e)
         {
-            if(listboxNames.SelectedItem != null)
+            if(listboxNames.SelectedItem != null && listboxNamesChosen.Items.Count < 15)
             {
                 listboxNamesChosen.Items.Add(listboxNames.SelectedItem.ToString());
 
