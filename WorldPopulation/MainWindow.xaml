@@ -11,7 +11,7 @@
         <Label FontSize="30" Margin="80, 0, 0, 0">Countries</Label>
         <ListBox x:Name="listboxNames" Margin="38,47,927,530" SelectionChanged="AddCountry"/>
         <Label FontSize="30" Margin="295, 0, 0, 0">Chosen Countries (max 15)</Label>
-        <ListBox x:Name="listboxNamesChosen" Margin="305,47,660,530"/>
+        <ListBox x:Name="listboxNamesChosen" Margin="305,47,660,530" SelectionChanged="DeleteCountry"/>
         <Label FontSize="30" Margin="580, 70, 470, 660">Start Year</Label>
         <TextBox x:Name="StartYearValue" Margin="730,76,359,0" FontSize="30" VerticalAlignment="Top" Height="48" />
         <Label FontSize="30" Margin="580, 150, 470, 580">End Year</Label>

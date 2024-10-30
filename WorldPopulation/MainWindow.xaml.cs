@@ -280,6 +280,24 @@ namespace WorldPopulation
             }
         }
 
+        public void DeleteCountry(object sender, SelectionChangedEventArgs e)
+        {
+            if (listboxNamesChosen.SelectedItem != null)
+            {
+                listboxNames.Items.Add(listboxNamesChosen.SelectedItem.ToString());
+                int index = listboxNamesChosen.SelectedIndex;
+                // Removing in the original listBox
+                if (listboxNamesChosen.SelectedIndex >= 0)
+                {
+                    listboxNamesChosen.Items.RemoveAt(index);
+                }
+
+                listboxNames.Items.SortDescriptions.Add(
+                    new System.ComponentModel.SortDescription("",
+                    System.ComponentModel.ListSortDirection.Ascending));
+            }
+        }
+
         /// <summary>
         /// This method will read the csv file and return a list of class with the results
         /// </summary>
