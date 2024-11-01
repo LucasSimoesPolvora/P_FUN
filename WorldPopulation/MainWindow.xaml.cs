@@ -32,6 +32,8 @@ namespace WorldPopulation
 
         string filePath = "";
 
+        bool isImported = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -44,14 +46,17 @@ namespace WorldPopulation
         /// </summary>
         public void ResetList()
         {
-            // Refilling the list box with country's names
-            List<CountryPopulation> countryPop = GiveValues(filePath);
-            listboxNames.Items.Clear();
-            countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
+            if (isImported)
+            {
+                // Refilling the list box with country's names
+                List<CountryPopulation> countryPop = GiveValues(filePath);
+                listboxNames.Items.Clear();
+                countryPop.ForEach(country => listboxNames.Items.Add(country.Name));
 
-            // Clear and refreshing the graph
-            ScottGraph.Plot.Clear();
-            ScottGraph.Refresh();
+                // Clear and refreshing the graph
+                ScottGraph.Plot.Clear();
+                ScottGraph.Refresh();
+            }
         }
 
         /// <summary>
@@ -327,6 +332,7 @@ namespace WorldPopulation
                             country.Add(c);
                         }
                     });
+                isImported = true;
                 return country;
             }
             catch
