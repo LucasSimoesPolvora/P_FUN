@@ -16,7 +16,10 @@
 |30 oct. 2024|Enlever le pays de la liste|5||
 |30 oct. 2024|Mettre le pays dans l'autre liste|10||
 |30 oct. 2024|Trier par ordre alphabétique|25||
-|01 nov. 2024|Faire le rapport|200||
+|01 nov. 2024|Faire le rapport|260||
 |01 nov. 2024|Régler le problème de librairie|120|<p>Au final je n'ai pas réussi à le régler. L'erreur disait qu'une librairie ne se chargait pas pour la première fois dans un nouvel ordinateur. La solution que j'ai trouvé est de supprimer le dossier bin et générer à nouveau la solution</p>|
+|01 nov. 2024|Faire en sorte que rien ne continue si l'import rate|10|<p>Tiago a trouvé un bug pendant qu'il testait, j'ai donc réglé le bug</p>|
+|01 nov. 2024|Filtrer l'explorateur de fichier par CSV|15|<p>Tiago m'a conseillé pendant son test de filtrer par CSV dans l'explorateur de fichier</p>|
+|01 nov. 2024|Faire le ReadMe|40||
 |Invalid Date|Améliorer l'UI|65||
 |Invalid Date|Améliorer le code|80|<p>Améliorer les algorythmes et enlever des lignes répétitives</p>|
