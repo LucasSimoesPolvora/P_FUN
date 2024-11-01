@@ -252,6 +252,7 @@ namespace WorldPopulation
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
 
+            openFileDialog.Filter = "CSV files (*.csv)|*.csv";
             bool? response = openFileDialog.ShowDialog();
 
             if (response == true)
